@@ -14,11 +14,7 @@ app.post('/register', (req, res) => {
     // SQL заявка за добавяне на нов потребител
     const query = 'INSERT INTO users (email, username, password_hash, full_name, age, bio, typea) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-    // За демо цел ще оставим "full_name", "age" и "bio" с фиксирани стойности. Може да добавиш нови полета, ако искаш.
-    const full_name = username; // Например, ползваме потребителското име като име
-    const age = 18; // Може да добавиш поле за възраст или да го оставиш фиксирано
-    const bio = "Нов потребител"; // Може да добавиш поле за био или да го оставиш фиксирано
-    const typea = role === 'student' ? 'ученик' : 'учител'; // Проверяваме типа на потребителя
+   
 
     // Изпълняваме заявката, без да криптираме паролата
     connection.query(query, [email, username, password, full_name, age, bio, typea], (err, result) => {
@@ -32,6 +28,6 @@ app.post('/register', (req, res) => {
 });
 
 // Стартиране на сървъра на порт 5000
-app.listen(5000, () => {
-    console.log('Сървърът работи на порт 5000');
+app.listen(5500, () => {
+    console.log('Сървърът работи на порт 5500');
 });
