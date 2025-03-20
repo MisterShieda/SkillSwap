@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillSwich</title>
-    <style>
-        body {
-            background-image: url('/img/background.jpg');
-            background-size: cover;   
+    <style>  
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        .button {
+        .header {
+            background-image: url('/img/background.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100px; 
             display: flex;
             justify-content: space-between; 
             align-items: center;
@@ -21,9 +24,8 @@
 
         .tital {
             color: aliceblue;
-            font-size: 32px;
-            margin: 0;
             font-size: 48px;
+            margin: 0;
         }
         
         .buttons-container {
@@ -35,50 +37,63 @@
             width: 120px;
             height: 60px;
             border-radius: 15px;
-            font-size: 16px;
-            font-weight: bold;
             font-size: 18px;
-            
-        }
-
-        .login {
-            background-color: rgb(102, 178, 218);
-            border: none;
-            color: black;
-            
-        }
-
-        .login:hover {
-            opacity: 0.8;
-        }
-
-        .reg {
+            font-weight: bold;
             background-color: white;
             border: 3px solid blue;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, opacity 0.3s;
         }
 
-        .reg:hover {
+        .login:hover, .reg:hover {
             background-color: rgb(0, 0, 255);
-            opacity: 0.8;
             color: white;
+            opacity: 0.8;
         }
 
         .button a {
             text-decoration: none;
         }
-        .container {
-            width: 350px;
-            margin: auto;
-            background: white;
+
+        .content {
+            background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
         }
 
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search-box {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid blue;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .search-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            background-color: darkblue;
+        }
     </style>
 </head>
 <body>
-    <div class="button">
+    <div class="header">
         <h1 class="tital">SkillSwap</h1>
         <div class="buttons-container">
             <a href="http://127.0.0.1:5500/register.html">
@@ -90,6 +105,14 @@
         </div>
     </div>
     <hr>
-    <p class="container">YOUR ass</p>
+    <div class="search-container">
+        <input type="text" class="search-box" placeholder="Search...">
+        <button class="search-button">Search</button>
+    </div>
+
+    <div class="content">
+        <p>Тук е бялата част на страницата.</p>
+    </div>
+
 </body>
 </html>
