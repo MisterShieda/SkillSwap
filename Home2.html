@@ -6,29 +6,30 @@
     <title>SkillSwap - Home</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
+          margin: 0;
+          padding: 0;
         }
 
         .button {
-            display: flex;
-            justify-content: space-between; 
-            align-items: center;
-            padding: 10px 20px;
-            background-image: url('/img/background.jpg');
-            background-size: cover;
-            background-position: center;
+          display: flex;
+          justify-content: space-between; 
+          align-items: center;
+          gap: 10px;
+          padding: 10px 20px;
+          background-image: url('/img/background.jpg');
+          background-size: cover;
+          background-position: center;
         }
 
         .title {
-            color: aliceblue;
-            font-size: 48px;
-            margin: 0;
+          color: aliceblue;
+          font-size: 48px;
+          margin: 0;
         }
-        
+
         .profile-container {
-            display: flex;
-            gap: 10px;
+          display: flex;
+          gap: 10px;
         }
 
         .profile, .logout {
@@ -42,12 +43,12 @@
         }
 
         .profile {
-            background-color: rgb(102, 178, 218);
-            color: black;
+          background-color: rgb(102, 178, 218);
+          color: black;
         }
 
         .profile:hover {
-            opacity: 0.8;
+          opacity: 0.8;
         }
 
         .logout {
@@ -66,7 +67,6 @@
         .search-container {
             display: flex;
             justify-content: center;
-            margin-top: 50px;
         }
 
         .search-box {
@@ -97,18 +97,22 @@
 <body>
     <div class="button">
         <h1 class="title">SkillSwap</h1>
+        
+        <div class="search-container">
+        <input type="text" class="search-box" placeholder="Търси...">
+        <button class="search-button">Търси</button>
+        </div>
+
         <div class="profile-container">
             <button class="logout" onclick="logout()">Изход</button>
             <a href="http://127.0.0.1:5500/profile.html">
                 <button class="profile">Моят профил</button>
             </a>
         </div>
+        
     </div>
 
-    <div class="search-container">
-        <input type="text" class="search-box" placeholder="Търси...">
-        <button class="search-button">Търси</button>
-    </div>
+    
 
     <script>
         function logout() {
