@@ -28,7 +28,7 @@
             margin-right: 15%;
             margin-left: 15%;
         }
-        input {
+        input, select {
             width: 95%;
             padding: 6px;
             margin: 5px 0;
@@ -58,6 +58,10 @@
         <input type="email" id="regEmail" placeholder="Имейл">
         <input type="password" id="regPassword" placeholder="Парола">
         <input type="password" id="regConfirmPassword" placeholder="Потвърди парола">
+        <select id="role">
+            <option value="student">Ученик</option>
+            <option value="teacher">Учител</option>
+        </select>
         <button onclick="register()">Регистрация</button>
         <p><a href="login.html">Вече имате акаунт? Вход</a></p>
     </div>
@@ -68,6 +72,7 @@
             let email = document.getElementById("regEmail").value;
             let password = document.getElementById("regPassword").value;
             let confirmPassword = document.getElementById("regConfirmPassword").value;
+            let role = document.getElementById("role").value;
 
             if (password !== confirmPassword) {
                 alert("Паролите не съвпадат!");
@@ -77,7 +82,7 @@
             let res = await fetch("http://localhost:5000/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ username, email, password, role })
             });
 
             let data = await res.json();
