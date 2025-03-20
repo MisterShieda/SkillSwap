@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профил</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 350px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        async function loadProfile() {
+            let token = localStorage.getItem("token");
+            if (!token) {
+                alert("Моля, регистрирайте се!");
+                window.location.href = "page2.html";
+                return;
+            }
+
+            let res = await fetch("http://localhost:5000/profile", {
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            let user = await res.json();
+            if (!user.username) {
+                alert("Профилът не е намерен. Моля, регистрирайте се!");
+                window.location.href = "page2.html";
+                return;
+            }
+
+            document.getElementById("username").textContent = user.username;
+            document.getElementById("email").textContent = user.email;
+            document.getElementById("bio").textContent = user.bio || "Няма описание";
+            document.getElementById("age").textContent = user.age || "Няма възраст";
+            document.getElementById("profilePic").src = user.profilePic || "default-avatar.png";
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "page2.html";
+        }
+
+        async function uploadImage(event) {
+            let file = event.target.files[0];
+            let formData = new FormData();
+            formData.append("image", file);
+
+            let token = localStorage.getItem("token");
+            let res = await fetch("http://localhost:5000/upload", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${token}` },
+                body: formData
+            });
+
+            let data = await res.json();
+            if (data.success) {
+                document.getElementById("profilePic").src = data.imageUrl;
+            } else {
+                alert("Неуспешно качване на снимка");
+            }
+        }
+
+        window.onload = loadProfile;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Добре дошли, <span id="username"></span>!</h1>
+        <img id="profilePic" src="default-avatar.png" alt="Профилна снимка">
+        <input type="file" accept="image/*" onchange="uploadImage(event)">
+        <p><strong>Имейл:</strong> <span id="email"></span></p>
+        <p><strong>Години:</strong> <span id="age"></span></p>
+        <p><strong>Описание:</strong> <span id="bio"></span></p>
+        <button onclick="logout()">Изход</button>
+    </div>
+</body>
+</html>
