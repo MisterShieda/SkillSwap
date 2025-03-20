@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            padding-top: 50px;
+            overflow: hidden;
+        }
+        .container {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 95%;
+            padding: 6px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="registerBox" class="container">
+        <h2>Регистрация</h2>
+        <input type="text" id="regUsername" placeholder="Потребителско име">
+        <input type="email" id="regEmail" placeholder="Имейл">
+        <input type="email" id="regConfirmEmail" placeholder="Потвърдете имейл">
+        <input type="password" id="regPassword" placeholder="Парола">
+        <input type="password" id="regConfirmPassword" placeholder="Потвърди парола">
+        <textarea id="regBio" placeholder="Био" rows="3" style="width: 95%;"></textarea>
+        <button onclick="register()">Регистрация</button>
+        <p><a href="#" onclick="showLogin()">Вече имате акаунт? Вход</a></p>
+    </div>
+
+    <div id="loginBox" class="container hidden">
+        <h2>Вход</h2>
+        <input type="text" id="loginUsername" placeholder="Потребителско име">
+        <input type="password" id="loginPassword" placeholder="Парола">
+        <button onclick="login()">Вход</button>
+        <p><a href="#" onclick="showRegister()">Нямате акаунт? Регистрация</a></p>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById("registerBox").classList.add("hidden");
+            document.getElementById("loginBox").classList.remove("hidden");
+        }
+
+        function showRegister() {
+            document.getElementById("loginBox").classList.add("hidden");
+            document.getElementById("registerBox").classList.remove("hidden");
+        }
+
+        async function register() {
+            let username = document.getElementById("regUsername").value;
+            let email = document.getElementById("regEmail").value;
+            let confirmEmail = document.getElementById("regConfirmEmail").value;
+            let password = document.getElementById("regPassword").value;
+            let confirmPassword = document.getElementById("regConfirmPassword").value;
+            let bio = document.getElementById("regBio").value;
+
+            if (email !== confirmEmail) {
+                alert("Имейлите не съвпадат!");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Паролите не съвпадат!");
+                return;
+            }
+
+            let res = await fetch("http://localhost:5000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password, bio })
+            });
+
+            let data = await res.json();
+            alert(data.message);
+        }
+
+        async function login() {
+            let username = document.getElementById("loginUsername").value;
+            let password = document.getElementById("loginPassword").value;
+
+            let res = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            let data = await res.json();
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                alert("Успешен вход!");
+                window.location.href = "profile.html";
+            } else {
+                alert(data.message);
+            }
+        }
+    </script>
+
+</body>
+</html>
