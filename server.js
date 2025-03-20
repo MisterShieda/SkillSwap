@@ -1,33 +1,43 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const connection = require('./db');  // Връзката с MySQL
+const express = require("express");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs"); // за криптиране на паролата
+const db = require("./db"); // файлът, който съдържа връзката с базата данни
 
 const app = express();
+const port = 5000;
 
-// Добавяме body-parser за обработка на JSON данни
 app.use(bodyParser.json());
 
-// Маршрут за добавяне на нов потребител (регистрация)
-app.post('/register', (req, res) => {
+app.post("/register", async (req, res) => {
     const { username, email, password, role } = req.body;
 
-    // SQL заявка за добавяне на нов потребител
-    const query = 'INSERT INTO users (email, username, password_hash, full_name, age, bio, typea) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    // Проверка дали всички полета са попълнени
+    if (!username || !email || !password || !role) {
+        return res.status(400).json({ message: "Моля, попълнете всички полета!" });
+    }
 
-   
+    // Проверка дали потребителят вече съществува
+    const existingUser = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    if (existingUser.length > 0) {
+        return res.status(400).json({ message: "Имейлът вече е зает!" });
+    }
 
-    // Изпълняваме заявката, без да криптираме паролата
-    connection.query(query, [email, username, password, full_name, age, bio, typea], (err, result) => {
-        if (err) {
-            console.error('Грешка при добавяне на потребител:', err);
-            return res.status(500).json({ message: 'Грешка при добавяне на потребител' });
-        }
-        // Успешно добавяне
-        res.status(201).json({ message: 'Потребителят е добавен успешно!' });
-    });
+    // Хеширане на паролата преди да я запишем в базата
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Записване на новия потребител в базата данни
+    try {
+        await db.query(
+            "INSERT INTO users (username, email, password_hash, typea) VALUES (?, ?, ?, ?)",
+            [username, email, hashedPassword, role]
+        );
+        res.status(201).json({ message: "Регистрацията е успешна!" });
+    } catch (err) {
+        console.error(err); 
+        res.status(500).json({ message: "Грешка при записване на потребителя!" });
+    }
 });
 
-// Стартиране на сървъра на порт 5000
-app.listen(5500, () => {
-    console.log('Сървърът работи на порт 5500');
+app.listen(port, () => {
+    console.log(`Сървърът работи на http://localhost:${port}`);
 });

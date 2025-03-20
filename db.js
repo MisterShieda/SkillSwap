@@ -1,18 +1,12 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
-    host: 'localhost', // или IP адрес на сървъра
-    user: 'root', // замени с твоя потребител
-    password: '12345', // замени с твоята парола
-    database: 'user_database'
+// Създаване на връзка с базата данни
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',  // Заменете с вашето потребителско име
+    password: '12345',  // Заменете с вашата парола
+    database: 'user_database'  // Заменете с името на вашата база данни
 });
 
-connection.connect(err => {
-    if (err) {
-        console.error('Грешка при свързването с MySQL:', err);
-        return;
-    }
-    console.log('Свързването с MySQL е успешно!');
-});
-
-module.exports = connection;
+// Експортиране на промиса за извършване на заявки
+module.exports = pool.promise();
