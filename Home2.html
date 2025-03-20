@@ -61,18 +61,54 @@
         .button a {
             text-decoration: none;
         }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .search-box {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid blue;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .search-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            background-color: darkblue;
+        }
     </style>
 </head>
 <body>
     <div class="button">
         <h1 class="title">SkillSwap</h1>
         <div class="profile-container">
+            <button class="logout" onclick="logout()">Изход</button>
             <a href="http://127.0.0.1:5500/profile.html">
                 <button class="profile">Моят профил</button>
             </a>
-            <button class="logout" onclick="logout()">Изход</button>
         </div>
     </div>
+
+    <div class="search-container">
+        <input type="text" class="search-box" placeholder="Търси...">
+        <button class="search-button">Търси</button>
+    </div>
+
     <script>
         function logout() {
             alert("Излязохте успешно!");
