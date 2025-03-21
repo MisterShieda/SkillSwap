@@ -71,7 +71,6 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Вътрешна грешка на сървъра!" });
     }
 });
-<<<<<<< HEAD
 
 // Създаване на чат
 app.post("/create-chat", async (req, res) => {
@@ -104,10 +103,6 @@ app.get("/api/subjects", async (req, res) => {
         res.status(500).json({ message: "Грешка при зареждане на предметите!" });
     }
 });
-=======
-
-
->>>>>>> 3b7a5333b366ed9b6ee5180b2907caedca1d0d2c
 
 app.listen(port, () => {
     console.log(`Сървърът работи на http://127.0.0.1:${port}`);
