@@ -265,7 +265,7 @@
             div.classList.add("skill-box");
             div.textContent = subject.subject_name;
             div.onclick = () => {
-                window.location.href = `teachers.html?subject=${encodeURIComponent(subject.subject_name)}§id=${encodeURIComponent(subject.id)}`;
+                window.location.href = `teachers.html?subject=${encodeURIComponent(subject.subject_name)}`;
             };
             skillContainer.appendChild(div);
         });
