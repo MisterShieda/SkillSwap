@@ -69,6 +69,7 @@
             border: 1px solid #ddd;
             font-size: 16px;
             box-sizing: border-box;
+
         }
 
         button {
@@ -81,18 +82,20 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 2%;
+            margin-bottom: 2%;
         }
 
         button:hover {
             background-color: #218838;
         }
 
-        .logout-btn {
+        .btn {
             background-color: #dc3545;
             margin-top: 10px;
         }
 
-        .logout-btn:hover {
+        .btn:hover {
             background-color: #c82333;
         }
     </style>
@@ -196,10 +199,10 @@
             <p><strong>Имейл:</strong> <span id="email"></span></p>
             <p><strong>Години:</strong> <span id="age"></span></p>
             <p><strong>Описание:</strong> <span id="bio"></span></p>
-        <button onclick="chat()">Започни чат</button>
+            
         </div>
-
-        <button onclick="logout()" class="logout-btn">Изход</button>
+        <button onclick="chat()" class="button">Започни чат</button>
+        <button onclick="logout()" class="button">Изход</button>
     </div>
 </body>
 </html>
