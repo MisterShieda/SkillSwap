@@ -9,11 +9,12 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: url('/img/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             color: white;
             animation: fadeIn 2s ease-in-out;
         }
@@ -34,16 +35,14 @@
             align-items: center;
             gap: 20px;
             padding: 20px 30px;
-            background-image: url('/img/background.jpg');
-            background-size: cover;
-            background-position: center;
+            background: rgba(0, 0, 0, 0.6); 
             border-radius: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease-in-out;
-            margin-top: 20px;
+            margin-top: 80px;
             width: 80%;
             max-width: 1000px;
-            animation: slideUp 1s ease-out; /* анимация на панела */
+            animation: slideUp 1s ease-out;
         }
 
         @keyframes slideUp {
@@ -62,7 +61,7 @@
             margin: 0;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
             font-family: 'Verdana', sans-serif;
-            animation: popIn 1s ease-out; /* анимация на заглавието */
+            animation: popIn 1s ease-out;
         }
 
         @keyframes popIn {
@@ -77,8 +76,12 @@
         }
 
         .profile-container {
+            position: absolute;
+            top: 20px;
+            width: 100%;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            padding: 0 20px;
         }
 
         .profile, .logout {
@@ -96,7 +99,7 @@
             background-color: rgb(102, 178, 218);
             color: black;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: fadeInElement 1.5s ease-out; /* забавено появяване на бутоните */
+            animation: fadeInElement 1.5s ease-out;
         }
 
         @keyframes fadeInElement {
@@ -113,29 +116,20 @@
         .profile:hover {
             background-color: #3b8dbd;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(-5px); 
-            animation: colorChange 0.5s linear forwards; /* плавен преход на цвета */
-        }
-
-        @keyframes colorChange {
-            0% {
-                background-color: rgb(102, 178, 218);
-            }
-            100% {
-                background-color: #2575fc;
-            }
+            transform: scale(1.05); 
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .logout {
             background-color: #d32f2f;
             color: white;
-            animation: fadeInElement 2s ease-out 0.5s; /* забавено появяване на бутона */
+            animation: fadeInElement 2s ease-out 0.5s;
         }
 
         .logout:hover {
             background-color: #c62828;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            transform: translateY(-5px);
+            transform: scale(1.05);
         }
 
         .button a {
@@ -178,9 +172,36 @@
 
         .search-button:hover {
             background-color: #2575fc;
-            transform: rotate(360deg); /* въртене на бутона */
+            transform: rotate(360deg);
         }
 
+        .skill-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .skill-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+
+        .skill-box:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -207,7 +228,6 @@
 =======
 >>>>>>> 3b7a5333b366ed9b6ee5180b2907caedca1d0d2c
     </div>
-
     <script>
         function logout() {
             alert("Излязохте успешно!");
