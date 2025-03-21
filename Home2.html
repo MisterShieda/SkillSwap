@@ -251,6 +251,29 @@
         }
     }
 
+    async function fetchSubjects() {
+    try {
+        const response = await fetch("http://localhost:5000/api/subjects");
+        const subjects = await response.json();
+        console.log(subjects);
+
+        const skillContainer = document.querySelector(".skill-container");
+        skillContainer.innerHTML = ""; // Изчистваме старите елементи
+
+        subjects.forEach(subject => {
+            const div = document.createElement("div");
+            div.classList.add("skill-box");
+            div.textContent = subject.subject_name;
+            div.onclick = () => {
+                window.location.href = `teachers.html?subject=${encodeURIComponent(subject.subject_name)}§id=${encodeURIComponent(subject.id)}`;
+            };
+            skillContainer.appendChild(div);
+        });
+    } catch (error) {
+        console.error("Грешка при извличане на предметите:", error);
+    }
+}
+
     // Извикване на функцията при зареждане на страницата
     document.addEventListener("DOMContentLoaded", fetchSubjects);
     </script>
