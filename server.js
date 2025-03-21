@@ -112,7 +112,11 @@ app.get("/api/teachers", async (req, res) => {
     try {
         const subject = req.query.subject;
         const [rows] = await db.query(
-            "SELECT name, email FROM teachers WHERE subject = ?", 
+            `SELECT u.full_name, u.email, u.bio
+             FROM users u
+             JOIN teacher_subjects ts ON u.id = ts.user_id
+             JOIN subjects s ON ts.subject_id = s.id
+             WHERE s.subject_name = ?`, 
             [subject]
         );
         res.json(rows);

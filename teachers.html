@@ -62,6 +62,7 @@
         async function fetchTeachers() {
             const params = new URLSearchParams(window.location.search);
             const subject = params.get("subject");
+            console.log(subject);
             const subjectId = params.get("id");
             
             document.getElementById("subject-title").textContent += subject;
@@ -69,16 +70,21 @@
             try {
                 const response = await fetch(`http://localhost:5000/api/teachers?subject=${encodeURIComponent(subject)}`);
                 const teachers = await response.json();
+                console.log(teachers);
 
                 const container = document.querySelector(".teacher-container");
                 container.innerHTML = "";
 
-                teachers.forEach(teacher => {
+                if (!Array.isArray(teachers)) {
+                console.error("Грешка: Получените данни не са масив:", teachers);
+            return;
+            }
+            teachers.forEach(teacher =>  {
                     const div = document.createElement("div");
                     div.classList.add("teacher-box");
-                    div.innerHTML = `<p><strong>${teacher.name}</strong></p>
+                    div.innerHTML = `<p>Name:${teacher.full_name}</p>
                                      <p>Email: ${teacher.email}</p>
-                                     <p>Локация: ${teacher.location || 'Неизвестно'}</p>`;
+                                     <p>Bio: ${teacher.bio || 'Неизвестно'}</p>`;
                     container.appendChild(div);
                 });
             } catch (error) {
