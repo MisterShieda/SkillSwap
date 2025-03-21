@@ -107,3 +107,17 @@ app.get("/api/subjects", async (req, res) => {
 app.listen(port, () => {
     console.log(`Сървърът работи на http://127.0.0.1:${port}`);
 });
+
+app.get("/api/teachers", async (req, res) => {
+    try {
+        const subject = req.query.subject;
+        const [rows] = await db.query(
+            "SELECT name, email FROM teachers WHERE subject = ?", 
+            [subject]
+        );
+        res.json(rows);
+    } catch (err) {
+        console.error("Грешка при зареждане на учителите:", err);
+        res.status(500).json({ message: "Грешка при зареждане на учителите!" });
+    }
+});
