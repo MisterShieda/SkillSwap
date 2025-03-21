@@ -58,6 +58,9 @@
         <input type="email" id="regEmail" placeholder="Имейл">
         <input type="password" id="regPassword" placeholder="Парола">
         <input type="password" id="regConfirmPassword" placeholder="Потвърди парола">
+        <input type="text" id="full_name" placeholder="Име и Фамилия">
+        <input type="number" id="age" placeholder="Възраст">
+        <input type="text" id="Bio" placeholder="Биография(кратко)">
         <select id="role">
             <option value="student">Ученик</option>
             <option value="teacher">Учител</option>
@@ -68,26 +71,50 @@
 
     <script>
         async function register() {
-            let username = document.getElementById("regUsername").value;
-            let email = document.getElementById("regEmail").value;
-            let password = document.getElementById("regPassword").value;
-            let confirmPassword = document.getElementById("regConfirmPassword").value;
-            let role = document.getElementById("role").value;
+    let username = document.getElementById("regUsername").value;
+    let email = document.getElementById("regEmail").value;
+    let password = document.getElementById("regPassword").value;
+    let confirmPassword = document.getElementById("regConfirmPassword").value;
+    let full_name = document.getElenetById("full_name").value;
+    let age = document.getElementById("age").value;
+    let bio = document.getElementById("Bio").value
+    let role = document.getElementById("role").value;
 
-            if (password !== confirmPassword) {
-                alert("Паролите не съвпадат!");
-                return;
-            }
+    // Проверка дали паролите съвпадат
+    if (password !== confirmPassword) {
+        alert("Паролите не съвпадат!");
+        return;
+    }
 
-            let res = await fetch("http://localhost:5000/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password, role })
-            });
+    // Проверка дали всички полета са попълнени
+    if (!username || !email || !password || !role) {
+        alert("Моля, попълнете всички полета!");
+        return;
+    }
 
+    // Изпращане на данни към сървъра
+    try {
+        console.log({ username, email, password, role })
+        let res = await fetch("http://127.0.0.1:5000/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password, role })
+        });
+
+        // Проверка на отговора от сървъра
+        if (res.ok) {
             let data = await res.json();
-            alert(data.message);
+            alert(data.message);  // Показва съобщението от сървъра
+        } else {
+            let errorData = await res.json();
+            alert("Грешка: " + errorData.message);  // Показва грешката, ако има такава
         }
+    } catch (err) {
+        console.error("Грешка при комуникацията със сървъра: ", err);
+        alert("Неуспешна регистрация! Опитайте отново по-късно.");
+    }
+}
+
     </script>
 </body>
 </html>
