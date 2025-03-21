@@ -50,12 +50,36 @@
                 width: 100%;
             }
         }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 2%;
+            margin-bottom: 2%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="subject-title">Учители по </h1>
         <div class="teacher-container"></div>
+        <div class="button">
+            <a href="http://127.0.0.1:5500/Profile2.html">
+                <button class="reg">Профил</button>
+            </a>
     </div>
 
     <script>
