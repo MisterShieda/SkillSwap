@@ -93,7 +93,6 @@
         const messageInput = document.getElementById("message-input");
         const sendBtn = document.getElementById("send-btn");
 
-        // Взима съобщенията от базата и ги показва
         async function loadMessages() {
             const response = await fetch("http://localhost:5000/messages");
             const messages = await response.json();
