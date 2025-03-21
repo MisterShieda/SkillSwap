@@ -58,6 +58,9 @@
         <input type="email" id="regEmail" placeholder="Имейл">
         <input type="password" id="regPassword" placeholder="Парола">
         <input type="password" id="regConfirmPassword" placeholder="Потвърди парола">
+        <input type="text" id="full_name" placeholder="Име и Фамилия">
+        <input type="number" id="age" placeholder="Възраст">
+        <input type="text" id="Bio" placeholder="Биография(кратко)">
         <select id="role">
             <option value="student">Ученик</option>
             <option value="teacher">Учител</option>
@@ -72,6 +75,9 @@
     let email = document.getElementById("regEmail").value;
     let password = document.getElementById("regPassword").value;
     let confirmPassword = document.getElementById("regConfirmPassword").value;
+    let full_name = document.getElenetById("full_name").value;
+    let age = document.getElementById("age").value;
+    let bio = document.getElementById("Bio").value
     let role = document.getElementById("role").value;
 
     // Проверка дали паролите съвпадат
