@@ -88,7 +88,24 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Вътрешна грешка на сървъра!" });
     }
 });
+app.post("/create-chat", async (req, res) => {
+    const { user1, user2 } = req.body;
+    await db.query("INSERT INTO chats (user_id_1, user_id_2) VALUES (?, ?) ON DUPLICATE KEY UPDATE id=id", [user1, user2]);
+    res.json({ message: "Чатът е създаден!" });
+});
 
+// Изпращане на съобщение
+app.post("/send-message", async (req, res) => {
+    const { chat_id, sender_id, message } = req.body;
+    await db.query("INSERT INTO messages (chat_id, sender_id, message_text) VALUES (?, ?, ?)", [chat_id, sender_id, message]);
+    res.json({ message: "Съобщението е изпратено!" });
+});
+
+// Вземане на съобщения за чат
+app.get("/messages/:chat_id", async (req, res) => {
+    const { chat_id } = req.params;
+    const [messages] = await db.query("SELECT * FROM messages WHERE chat_id = ? ORDER BY sent_at ASC", [chat_id]);
+    res.json(messages);});
 
 
 app.listen(port, () => {
