@@ -49,6 +49,52 @@
         button:hover {
             background-color: #218838;
         }
+        .dropdown {
+            position: relative;
+            display: none;
+            width: 100%;
+            text-align: left;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .dropdown-content label {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            justify-content: space-between;
+        }
+        .dropdown-content input {
+            order: 2;
+            margin-left: auto;
+        }
+        .dropdown-content label:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown-btn {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #28a745;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .dropdown-btn:hover {
+            background: white;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -61,61 +107,41 @@
         <input type="text" id="full_name" placeholder="Име и Фамилия">
         <input type="number" id="age" placeholder="Възраст">
         <input type="text" id="Bio" placeholder="Биография(кратко)">
-        <select id="role">
+        <select id="role" onchange="toggleDropdownVisibility()">
             <option value="student">Ученик</option>
             <option value="teacher">Учител</option>
         </select>
+        
+        <div class="dropdown" id="interestDropdown">
+            <button class="dropdown-btn" onclick="toggleDropdown()">Изберете интереси</button>
+            <div class="dropdown-content" id="dropdownContent">
+                <label>Математика <input type="checkbox" value="math" class="interest"></label>
+                <label>Наука <input type="checkbox" value="science" class="interest"></label>
+                <label>История <input type="checkbox" value="history" class="interest"></label>
+                <label>Литература <input type="checkbox" value="literature" class="interest"></label>
+                <label>Спорт <input type="checkbox" value="sports" class="interest"></label>
+            </div>
+        </div>
+        
         <button onclick="register()">Регистрация</button>
         <p><a href="login.html">Вече имате акаунт? Вход</a></p>
     </div>
 
     <script>
-        async function register() {
-    let username = document.getElementById("regUsername").value;
-    let email = document.getElementById("regEmail").value;
-    let password = document.getElementById("regPassword").value;
-    let confirmPassword = document.getElementById("regConfirmPassword").value;
-    let full_name = document.getElementById("full_name").value;
-    let age = Number(document.getElementById("age").value);
-    let bio = document.getElementById("Bio").value;
-    let role = document.getElementById("role").value;
-
-    // Проверка дали паролите съвпадат
-    if (password !== confirmPassword) {
-        alert("Паролите не съвпадат!");
-        return;
-    }
-
-    // Проверка дали всички полета са попълнени
-    if (!username || !email || !password || !role) {
-        alert("Моля, попълнете всички полета!");
-        return;
-    }
-
-    // Изпращане на данни към сървъра
-    try {
-        console.log({ username, email, password, role })
-        let res = await fetch("http://127.0.0.1:5000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password, role, full_name, age, bio })
-        });
-
-        // Проверка на отговора от сървъра
-        if (res.ok) {
-            let data = await res.json();
-            window.location.href = "http://127.0.0.1:5500/home2.html";
-        } else {
-            let errorData = await res.json();
-            alert("Грешка: " + errorData.message);  // Показва грешката, ако има такава
+        function toggleDropdown() {
+            let dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
-    } catch (err) {
-        console.error("Грешка при комуникацията със сървъра: ", err);
-        alert("Неуспешна регистрация! Опитайте отново по-късно.");
-    }
-  
-}
 
+        function toggleDropdownVisibility() {
+            let role = document.getElementById("role").value;
+            let dropdown = document.getElementById("interestDropdown");
+            if (role === "teacher") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>
