@@ -41,7 +41,6 @@
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #0f0e0e;
-            
         }
 
         input[type="file"] {
@@ -63,17 +62,6 @@
             margin-bottom: 20px;
         }
 
-        select, input[type="text"], input[type="email"], input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            box-sizing: border-box;
-
-        }
-
         button {
             width: 100%;
             padding: 12px;
@@ -90,15 +78,6 @@
 
         button:hover {
             background-color: #218838;
-        }
-
-        .btn {
-            background-color: #dc3545;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #c82333;
         }
     </style>
     <script>
@@ -123,14 +102,13 @@
             }
 
             document.getElementById("username").textContent = user.username;
+            document.getElementById("firstname").textContent = user.firstname || "Няма име";
+            document.getElementById("lastname").textContent = user.lastname || "Няма фамилия";
             document.getElementById("email").textContent = user.email;
             document.getElementById("bio").textContent = user.bio || "Няма описание";
             document.getElementById("age").textContent = user.age || "Няма възраст";
             document.getElementById("profilePic").src = "img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
-            console.log(user.profilePic)
         }
-
-        
 
         function logout() {
             localStorage.removeItem("token");
@@ -164,15 +142,16 @@
     <div class="container">
         <h1>Добре дошли, <span id="username"></span>!</h1>
         <img id="profilePic" src="img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" alt="Профилна снимка">
-        <input type="file" accept="image/*" onchange="uploadImage(event)">
+        <input type="file" accept="image/*" onchange="uploadImage(event)" value="Избери снимка">
         
         <div class="profile-details">
+            <p><strong>Име:</strong> <span id="firstname"></span></p>
+            <p><strong>Фамилия:</strong> <span id="lastname"></span></p>
             <p><strong>Имейл:</strong> <span id="email"></span></p>
             <p><strong>Години:</strong> <span id="age"></span></p>
             <p><strong>Описание:</strong> <span id="bio"></span></p>
-            
         </div>
-        <button onclick="logout()" class="button">Изход</button>
+        <button onclick="logout()">Изход</button>
     </div>
 </body>
 </html>
