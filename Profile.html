@@ -6,38 +6,97 @@
     <title>Профил</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 5px;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background: url('/img/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            height: 100vh;
         }
+
         .container {
-            width: 350px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            background: rgba(255, 255, 255, 0.8); 
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 140px; 
         }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
         img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #ddd;
         }
-        button {
+
+        input[type="file"] {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        p {
+            color: #555;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        p strong {
+            color: #333;
+        }
+
+        .profile-details {
+            margin-bottom: 20px;
+        }
+
+        select, input[type="text"], input[type="email"], input[type="number"] {
             width: 100%;
             padding: 10px;
-            cursor: pointer;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
             background-color: #28a745;
             color: white;
-            border: none;
-            border-radius: 5px;
             font-size: 16px;
-            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 2%;
+            margin-bottom: 2%;
         }
+
         button:hover {
             background-color: #218838;
+        }
+
+        .btn {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #c82333;
         }
     </style>
     <script>
@@ -57,7 +116,7 @@
             let user = await res.json();
             if (!user.username) {
                 alert("Профилът не е намерен. Моля, регистрирайте се!");
-                window.location.href = "page2.html";
+                window.location.href = "Login.html";
                 return;
             }
 
@@ -68,9 +127,43 @@
             document.getElementById("profilePic").src = user.profilePic || "default-avatar.png";
         }
 
+        async function chat() {
+            let token = localStorage.getItem("token");
+            if (!token) {
+                alert("Моля, влезте в профила си!");
+                return;
+            }
+
+            let currentUserRes = await fetch("http://localhost:5000/current-user", {
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            let currentUser = await currentUserRes.json();
+            let user1 = currentUser.username;
+            let user2 = document.getElementById("username").textContent;
+
+            if (!user1 || !user2 || user1 === user2) {
+                alert("Невалиден избор за чат!");
+                return;
+            }
+
+            let res = await fetch("http://localhost:5000/create-chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ user1, user2 })
+            });
+
+            let data = await res.json();
+            alert(data.message);
+        }
+        
+
         function logout() {
             localStorage.removeItem("token");
-            window.location.href = "page2.html";
+            window.location.href = "Login.html";
         }
 
         async function uploadImage(event) {
@@ -101,10 +194,15 @@
         <h1>Добре дошли, <span id="username"></span>!</h1>
         <img id="profilePic" src="default-avatar.png" alt="Профилна снимка">
         <input type="file" accept="image/*" onchange="uploadImage(event)">
-        <p><strong>Имейл:</strong> <span id="email"></span></p>
-        <p><strong>Години:</strong> <span id="age"></span></p>
-        <p><strong>Описание:</strong> <span id="bio"></span></p>
-        <button onclick="logout()">Изход</button>
+        
+        <div class="profile-details">
+            <p><strong>Имейл:</strong> <span id="email"></span></p>
+            <p><strong>Години:</strong> <span id="age"></span></p>
+            <p><strong>Описание:</strong> <span id="bio"></span></p>
+            
+        </div>
+        <button onclick="chat()" class="button">Започни чат</button>
+        <button onclick="logout()" class="button">Изход</button>
     </div>
 </body>
 </html>
