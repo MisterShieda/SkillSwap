@@ -222,17 +222,7 @@
         
         <div class="skill-container">
             <div class="skill-box">Математика</div>
-            <div class="skill-box">Български език</div>
-            <div class="skill-box">Програмиране</div>
-            <div class="skill-box">Свирене на китара</div>
-            <div class="skill-box">Английски език</div>
-            <div class="skill-box">Химия</div>
-            <div class="skill-box">Физика</div>
-            <div class="skill-box">Биология</div>
-            <div class="skill-box">Психология</div>
-            <div class="skill-box">Руски език</div>
-            <div class="skill-box">География</div>
-            <div class="skill-box">Дизайнер</div> 
+           
         </div>
     </div>
     <script>
@@ -240,6 +230,29 @@
             alert("Излязохте успешно!");
             window.location.href = "login.html";
         }
+
+        async function fetchSubjects() {
+        try {
+            const response = await fetch("http://localhost:5000/api/subjects"); // Заменете с точния URL на вашия бекенд
+            const subjects = await response.json();
+            console.log(subjects)
+
+            const skillContainer = document.querySelector(".skill-container");
+            skillContainer.innerHTML = ""; // Изчистваме старите елементи
+
+            subjects.forEach(subject => {
+                const div = document.createElement("div");
+                div.classList.add("skill-box");
+                div.textContent = subject.subject_name; // Предполага се, че предметите имат поле "name"
+                skillContainer.appendChild(div);
+            });
+        } catch (error) {
+            console.error("Грешка при извличане на предметите:", error);
+        }
+    }
+
+    // Извикване на функцията при зареждане на страницата
+    document.addEventListener("DOMContentLoaded", fetchSubjects);
     </script>
 </body>
 </html>
