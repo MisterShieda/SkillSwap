@@ -210,8 +210,9 @@
         
         <div class="search-container">
             <input type="text" class="search-box" placeholder="Търси...">
-            <button class="search-button">Търси</button>
+            <button class="search-button" onclick="searchSubjects()">Търси</button>
         </div>
+        
 
         <div class="profile-container">
             <button class="logout" onclick="logout()">Изход</button>
@@ -226,6 +227,7 @@
         </div>
     </div>
     <script>
+        var subjectsGlobal;
         function logout() {
             alert("Излязохте успешно!");
             window.location.href = "login.html";
@@ -233,48 +235,47 @@
 
         async function fetchSubjects() {
         try {
-            const response = await fetch("http://localhost:5000/api/subjects"); // Заменете с точния URL на вашия бекенд
+            const response = await fetch("http://localhost:5000/api/subjects"); 
             const subjects = await response.json();
+            subjectsGlobal = subjects;
             console.log(subjects)
 
             const skillContainer = document.querySelector(".skill-container");
-            skillContainer.innerHTML = ""; // Изчистваме старите елементи
+            skillContainer.innerHTML = ""; 
 
             subjects.forEach(subject => {
                 const div = document.createElement("div");
                 div.classList.add("skill-box");
-                div.textContent = subject.subject_name; // Предполага се, че предметите имат поле "name"
+                div.textContent = subject.subject_name; 
+                div.onclick = () => {
+                window.location.href = `teachers.html?subject=${encodeURIComponent(subject.subject_name)}`;
+            };
+
                 skillContainer.appendChild(div);
             });
+            
         } catch (error) {
             console.error("Грешка при извличане на предметите:", error);
         }
-    }
+        }
+        function displaySubjects(filteredSubjects) {
+            console.log(filteredSubjects);
+            const skillContainer = document.querySelector(".skill-container");
+            skillContainer.innerHTML = "";
+            filteredSubjects.forEach(subject => {
+                const div = document.createElement("div");
+                div.classList.add("skill-box");
+                div.textContent = subject.subject_name;
+                skillContainer.appendChild(div);
+            });
+        }
+        function searchSubjects() {
+            const searchTerm = document.querySelector(".search-box").value.toLowerCase();
+            const filteredSubjects = subjectsGlobal.filter(subject => subject.subject_name.toLowerCase().includes(searchTerm));
+            displaySubjects(filteredSubjects);
+        }
 
-    async function fetchSubjects() {
-    try {
-        const response = await fetch("http://localhost:5000/api/subjects");
-        const subjects = await response.json();
-        console.log(subjects);
-
-        const skillContainer = document.querySelector(".skill-container");
-        skillContainer.innerHTML = ""; // Изчистваме старите елементи
-
-        subjects.forEach(subject => {
-            const div = document.createElement("div");
-            div.classList.add("skill-box");
-            div.textContent = subject.subject_name;
-            div.onclick = () => {
-                window.location.href = `teachers.html?subject=${encodeURIComponent(subject.subject_name)}`;
-            };
-            skillContainer.appendChild(div);
-        });
-    } catch (error) {
-        console.error("Грешка при извличане на предметите:", error);
-    }
-}
-
-    // Извикване на функцията при зареждане на страницата
+    
     document.addEventListener("DOMContentLoaded", fetchSubjects);
     </script>
 </body>

@@ -128,11 +128,56 @@
     </div>
 
     <script>
+        async function register() {
+            let username = document.getElementById("regUsername").value;
+            let email = document.getElementById("regEmail").value;
+            let password = document.getElementById("regPassword").value;
+            let confirmPassword = document.getElementById("regConfirmPassword").value;
+            let full_name = document.getElementById("full_name").value;
+            let age = Number(document.getElementById("age").value);
+            let bio = document.getElementById("Bio").value;
+            let role = document.getElementById("role").value;
+    
+            // Проверка дали паролите съвпадат
+            if (password !== confirmPassword) {
+                alert("Паролите не съвпадат!");
+                return;
+            }
+    
+            // Проверка дали всички полета са попълнени
+            if (!username || !email || !password || !role) {
+                alert("Моля, попълнете всички полета!");
+                return;
+            }
+    
+            // Изпращане на данни към сървъра
+            try {
+                console.log({ username, email, password, role });
+                let res = await fetch("http://127.0.0.1:5000/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, password, role, full_name, age, bio })
+                });
+    
+                // Проверка на отговора от сървъра
+                if (res.ok) {
+                    let data = await res.json();
+                    window.location.href = "http://127.0.0.1:5500/home2.html";
+                } else {
+                    let errorData = await res.json();
+                    alert("Грешка: " + errorData.message);  // Показва грешката, ако има такава
+                }
+            } catch (err) {
+                console.error("Грешка при комуникацията със сървъра: ", err);
+                alert("Неуспешна регистрация! Опитайте отново по-късно.");
+            }
+        }
+    
         function toggleDropdown() {
             let dropdown = document.getElementById("dropdownContent");
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
-
+    
         function toggleDropdownVisibility() {
             let role = document.getElementById("role").value;
             let dropdown = document.getElementById("interestDropdown");
@@ -143,5 +188,7 @@
             }
         }
     </script>
+    
+    
 </body>
 </html>
