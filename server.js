@@ -2,9 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs"); // за криптиране на паролата
 const db = require("./db"); // файлът, който съдържа връзката с базата данни
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
 const app = express();
+app.use(express.json());
+
 const port = 5000;
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
@@ -34,7 +40,7 @@ app.post("/register", async (req, res) => {
 
         // Записване на новия потребител в базата данни
         await db.query(
-            "INSERT INTO users (username, email, bio, age, full_name, password_hash, typea) VALUES (?, ?, ?, ?)",
+            "INSERT INTO users (username, email, bio, age, full_name, password_hash, typea) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [username, email, bio, age, full_name,  hashedPassword, role]
         );
         
@@ -45,7 +51,46 @@ app.post("/register", async (req, res) => {
     }
 });
 
+app.use(express.json());
+
+const secretKey = "super_secret_key"; // Смени с реален таен ключ
+
+app.post("/login", async (req, res) => {
+    console.log("Получени данни от клиента:", req.body); // Логни входните данни
+    
+    const { username1, password } = req.body;
+
+    if (!username1 || !password) {
+        return res.status(400).json({ message: "Моля, попълнете всички полета!" });
+    }
+
+    try {
+        const [rows] = await db.query("SELECT * FROM users WHERE username = ?", [username1]);
+
+        console.log("Резултат от заявката:", rows); // Виж дали връща потребител
+
+        if (rows.length === 0) {
+            return res.status(400).json({ message: "Грешно потребителско име или парола!" });
+        }
+
+        const user = rows[0];
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Грешно потребителско име или парола!" });
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username }, "super_secret_key", { expiresIn: "1h" });
+
+        res.json({ message: "Успешен вход!", token });
+    } catch (err) {
+        console.error("Грешка при вход:", err);
+        res.status(500).json({ message: "Вътрешна грешка на сървъра!" });
+    }
+});
+
+
 
 app.listen(port, () => {
-    console.log(`Сървърът работи на http://localhost:${port}`);
+    console.log(`Сървърът работи на http://127.0.0.1:${port}`);
 });

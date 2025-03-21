@@ -75,9 +75,9 @@
     let email = document.getElementById("regEmail").value;
     let password = document.getElementById("regPassword").value;
     let confirmPassword = document.getElementById("regConfirmPassword").value;
-    let full_name = document.getElenetById("full_name").value;
-    let age = document.getElementById("age").value;
-    let bio = document.getElementById("Bio").value
+    let full_name = document.getElementById("full_name").value;
+    let age = Number(document.getElementById("age").value);
+    let bio = document.getElementById("Bio").value;
     let role = document.getElementById("role").value;
 
     // Проверка дали паролите съвпадат
@@ -98,7 +98,7 @@
         let res = await fetch("http://127.0.0.1:5000/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password, role })
+            body: JSON.stringify({ username, email, password, role, full_name, age, bio })
         });
 
         // Проверка на отговора от сървъра
