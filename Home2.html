@@ -9,11 +9,12 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: url('/img/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             color: white;
             animation: fadeIn 2s ease-in-out;
         }
@@ -34,13 +35,11 @@
             align-items: center;
             gap: 20px;
             padding: 20px 30px;
-            background-image: url('/img/background.jpg');
-            background-size: cover;
-            background-position: center;
+            background: rgba(0, 0, 0, 0.6); /* slightly dark background */
             border-radius: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease-in-out;
-            margin-top: 20px;
+            margin-top: 80px;
             width: 80%;
             max-width: 1000px;
             animation: slideUp 1s ease-out;
@@ -77,8 +76,12 @@
         }
 
         .profile-container {
+            position: absolute;
+            top: 20px;
+            width: 100%;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            padding: 0 20px;
         }
 
         .profile, .logout {
@@ -172,6 +175,33 @@
             transform: rotate(360deg);
         }
 
+        .skill-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        .skill-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+
+        .skill-box:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -189,8 +219,16 @@
                 <button class="profile">Моят профил</button>
             </a>
         </div>
+        
+        <div class="skill-container">
+            <div class="skill-box">Математика</div>
+            <div class="skill-box">Български</div>
+            <div class="skill-box">Програмиране</div>
+            <div class="skill-box">Свирене на китара</div>
+            <div class="skill-box">Английски език</div>
+            <div class="skill-box">Химия</div>
+        </div>
     </div>
-
     <script>
         function logout() {
             alert("Излязохте успешно!");
