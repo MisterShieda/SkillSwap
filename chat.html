@@ -92,5 +92,43 @@
         </div>
     </div>
 
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const messageInput = document.getElementById("message-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        async function loadMessages() {
+            const response = await fetch("http://localhost:5000/messages");
+            const messages = await response.json();
+
+            chatBox.innerHTML = "";
+            messages.forEach(msg => {
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message", msg.sender_id === 1 ? "sent" : "received");
+                messageElement.textContent = msg.message_text;
+                chatBox.appendChild(messageElement);
+            });
+
+            chatBox.scrollTop = chatBox.scrollHeight; 
+        }
+
+        sendBtn.addEventListener("click", async () => {
+            const message = messageInput.value.trim();
+            if (message === "") return;
+
+            await fetch("http://localhost:5000/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sender_id: 1, chat_id: 1, message_text: message })
+            });
+
+            messageInput.value = "";
+            loadMessages();
+        });
+
+        loadMessages();
+        setInterval(loadMessages, 3000);
+    </script>
+
 </body>
 </html>

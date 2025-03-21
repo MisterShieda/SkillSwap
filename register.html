@@ -104,7 +104,7 @@
         // Проверка на отговора от сървъра
         if (res.ok) {
             let data = await res.json();
-            alert(data.message);  // Показва съобщението от сървъра
+            window.location.href = "http://127.0.0.1:5500/home2.html";
         } else {
             let errorData = await res.json();
             alert("Грешка: " + errorData.message);  // Показва грешката, ако има такава
@@ -113,6 +113,7 @@
         console.error("Грешка при комуникацията със сървъра: ", err);
         alert("Неуспешна регистрация! Опитайте отново по-късно.");
     }
+  
 }
 
     </script>
