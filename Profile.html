@@ -34,16 +34,18 @@
         }
 
         img {
+            display: block; 
+            margin: auto;
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 15px;
-            border: 3px solid #ddd;
+            border: 3px solid #0f0e0e;
+            
         }
 
         input[type="file"] {
-            margin-bottom: 15px;
+            margin: auto;
             font-size: 14px;
         }
 
@@ -124,41 +126,10 @@
             document.getElementById("email").textContent = user.email;
             document.getElementById("bio").textContent = user.bio || "Няма описание";
             document.getElementById("age").textContent = user.age || "Няма възраст";
-            document.getElementById("profilePic").src = user.profilePic || "default-avatar.png";
+            document.getElementById("profilePic").src = "img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
+            console.log(user.profilePic)
         }
 
-        async function chat() {
-            let token = localStorage.getItem("token");
-            if (!token) {
-                alert("Моля, влезте в профила си!");
-                return;
-            }
-
-            let currentUserRes = await fetch("http://localhost:5000/current-user", {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            let currentUser = await currentUserRes.json();
-            let user1 = currentUser.username;
-            let user2 = document.getElementById("username").textContent;
-
-            if (!user1 || !user2 || user1 === user2) {
-                alert("Невалиден избор за чат!");
-                return;
-            }
-
-            let res = await fetch("http://localhost:5000/create-chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ user1, user2 })
-            });
-
-            let data = await res.json();
-            alert(data.message);
-        }
         
 
         function logout() {
@@ -192,7 +163,7 @@
 <body>
     <div class="container">
         <h1>Добре дошли, <span id="username"></span>!</h1>
-        <img id="profilePic" src="default-avatar.png" alt="Профилна снимка">
+        <img id="profilePic" src="img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" alt="Профилна снимка">
         <input type="file" accept="image/*" onchange="uploadImage(event)">
         
         <div class="profile-details">
@@ -201,7 +172,6 @@
             <p><strong>Описание:</strong> <span id="bio"></span></p>
             
         </div>
-        <button onclick="chat()" class="button">Започни чат</button>
         <button onclick="logout()" class="button">Изход</button>
     </div>
 </body>
