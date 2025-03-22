@@ -187,6 +187,28 @@
                 dropdown.style.display = "none";
             }
         }
+        async function getSubjects() {
+    try {
+        const response = await fetch("http://localhost:5000/api/subjects"); 
+        const subjects = await response.json();
+        
+        let dropdownContent = document.getElementById("dropdownContent");
+        dropdownContent.innerHTML = ""; // Изчистване на старите стойности
+        
+        subjects.forEach(subject => {
+            let label = document.createElement("label");
+            label.innerHTML = `${subject.subject_name} <input type="checkbox" value="${subject.id}" class="interest">`;
+            dropdownContent.appendChild(label);
+        });
+        
+    } catch (error) {
+        console.error("Грешка при зареждането на предметите: ", error);
+    }
+}
+
+// Извикване на функцията при зареждане на страницата
+window.onload = getSubjects;
+
     </script>
     
     

@@ -82,33 +82,46 @@
     </style>
     <script>
         async function loadProfile() {
-            let token = localStorage.getItem("token");
-            if (!token) {
-                alert("Моля, регистрирайте се!");
-                window.location.href = "register.html";
-                return;
-            }
+    let token = localStorage.getItem("token"); // Вземаме токена от localStorage
+    if (!token) {
+        alert("Моля, регистрирайте се!");
+        window.location.href = "register.html";
+        return;
+    }
 
-            let res = await fetch("http://localhost:5000/profile", {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+    try {
+        // Изпращаме заявка към сървъра за профила
+        let res = await fetch("http://localhost:5000/profile", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
-            let user = await res.json();
-            if (!user.username) {
-                alert("Профилът не е намерен. Моля, регистрирайте се!");
-                window.location.href = "Login.html";
-                return;
-            }
-
-            document.getElementById("username").textContent = user.username;
-            document.getElementById("firstname").textContent = user.firstname || "Няма име";
-            document.getElementById("lastname").textContent = user.lastname || "Няма фамилия";
-            document.getElementById("email").textContent = user.email;
-            document.getElementById("bio").textContent = user.bio || "Няма описание";
-            document.getElementById("age").textContent = user.age || "Няма възраст";
-            document.getElementById("profilePic").src = "img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
+        if (!res.ok) {
+            alert("Грешка при зареждане на профила. Моля, опитайте отново.");
+            return;
         }
+
+        let user = await res.json(); // Получаваме данни за потребителя
+        if (!user.username) {
+            alert("Профилът не е намерен. Моля, регистрирайте се!");
+            window.location.href = "Login.html";
+            return;
+        }
+
+        // Попълваме полетата с данни от профила
+        document.getElementById("username").textContent = user.username;
+        document.getElementById("full_name").textContent = user.full_name || "Няма име";
+        document.getElementById("email").textContent = user.email;
+        document.getElementById("bio").textContent = user.bio || "Няма описание";
+        document.getElementById("age").textContent = user.age || "Няма възраст";
+
+        // Вземаме снимката от сървъра или задаваме стандартна
+        document.getElementById("profilePic").src = user.profile_picture_url || "img/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
+    } catch (err) {
+        console.error("Грешка при зареждане на профил:", err);
+        alert("Грешка при зареждане на профила.");
+    }
+}
 
         function logout() {
             localStorage.removeItem("token");
@@ -145,8 +158,7 @@
         <input type="file" accept="image/*" onchange="uploadImage(event)" value="Избери снимка">
         
         <div class="profile-details">
-            <p><strong>Име:</strong> <span id="firstname"></span></p>
-            <p><strong>Фамилия:</strong> <span id="lastname"></span></p>
+            <p><strong>Име(Пълно):</strong> <span id="full_name"></span></p>
             <p><strong>Имейл:</strong> <span id="email"></span></p>
             <p><strong>Години:</strong> <span id="age"></span></p>
             <p><strong>Описание:</strong> <span id="bio"></span></p>

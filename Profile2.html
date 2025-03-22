@@ -92,27 +92,45 @@
 
     </style>
     <script>
-        async function loadProfile() {
-            let token = localStorage.getItem("token");
+       async function loadProfile() {
+    let token = localStorage.getItem("token");
 
-            let res = await fetch("http://localhost:5000/profile2", {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+    // Вземи teacherId от URL параметър
+    let params = new URLSearchParams(window.location.search);
+    let userId = params.get("teacherId");
 
-            let user = await res.json();
-            if (!user.username) {
-                alert("Профилът не е намерен. Моля, регистрирайте се!");
-                window.location.href = "Login.html";
-                return;
-            }
+    if (!userId) {
+        alert("Няма предоставено ID на учителя в URL!");
+        return;
+    }
 
-            document.getElementById("username").textContent = user.username;
-            document.getElementById("email").textContent = user.email;
-            document.getElementById("bio").textContent = user.bio || "Няма описание";
-            document.getElementById("age").textContent = user.age || "Няма възраст";
-            document.getElementById("profilePic").src = user.profilePic || "default-avatar.png";
-        }
+    let res = await fetch(`http://localhost:5000/user/${userId}`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    let user = await res.json();
+    if (!user.username) {
+        alert("Профилът не е намерен. Моля, опитайте отново!");
+        window.location.href = "Login.html";
+        return;
+    }
+
+    // Проверка дали елементите съществуват
+    let usernameElement = document.getElementById("username");
+    let emailElement = document.getElementById("email");
+    let bioElement = document.getElementById("bio");
+    let ageElement = document.getElementById("age");
+    let profilePicElement = document.getElementById("profilePic");
+
+    if (usernameElement) usernameElement.textContent = user.username;
+    if (emailElement) emailElement.textContent = user.email;
+    if (bioElement) bioElement.textContent = user.bio || "Няма описание";
+    if (ageElement) ageElement.textContent = user.age || "Няма възраст";
+    if (profilePicElement) profilePicElement.src = user.profile_picture_url || "img/default-avatar.png";
+}
+
+
 
         async function chat() {
             let token = localStorage.getItem("token");
@@ -179,6 +197,7 @@
         <input type="file" accept="image/*" onchange="uploadImage(event)">
         
         <div class="profile-details">
+            <p><strong>Име(Пълно):</strong> <span id="full_name"></span></p>
             <p><strong>Имейл:</strong> <span id="email"></span></p>
             <p><strong>Години:</strong> <span id="age"></span></p>
             <p><strong>Описание:</strong> <span id="bio"></span></p>
